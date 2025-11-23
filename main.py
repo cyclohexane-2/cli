@@ -21,7 +21,7 @@ def main():
     manager, status = StudentManager.load_manager()
 
     if status == 2:
-        print("Error: Invalid persistance file, Unable to load data.")
+        print("Error: Invalid persistence file, Unable to load data.")
 
     if args.command == 'add-assignment':
         if not args.value or not args.deadline:

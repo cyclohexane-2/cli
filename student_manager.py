@@ -7,7 +7,7 @@ from utils import calculate_days_remaining, validate_grade, get_priority_level, 
 
 
 class StudentManager:
-    PERSISTANCE_FILE_NAME = "data.json"
+    persistence_FILE_NAME = "data.json"
     def __init__(self):
         self.assignments = []
         self.grades = []
@@ -77,20 +77,20 @@ class StudentManager:
     def dump_manager(self):
         """Dumps data into json file for persistence"""
         data = self.__ser_object()
-        save_to_json(data, self.PERSISTANCE_FILE_NAME)
+        save_to_json(data, self.persistence_FILE_NAME)
 
     @classmethod
     def load_manager(cls):
         """
-        Load data into the program from persistance file
+        Load data into the program from persistence file
 
         Returns: 
             int: status of loading data from file
             0 - success
-            1 - persistance file not found
-            2 - corrupted persistance file
+            1 - persistence file not found
+            2 - corrupted persistence file
         """
-        data = load_from_json(cls.PERSISTANCE_FILE_NAME)
+        data = load_from_json(cls.persistence_FILE_NAME)
         if "status" in data:
             status = data.get("status")
             return cls(), status
