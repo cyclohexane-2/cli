@@ -44,6 +44,9 @@ python main.py list
 # Mark assignment as completed
 python main.py complete "Math Homework"
 
+# Delete an assignment
+python main.py delete "Math Homework"
+
 # Calculate your GPA
 python main.py gpa
 
@@ -60,11 +63,14 @@ Added assignment: Physics Lab
 $ python main.py add-assignment "History Essay" --deadline "2025-12-05" --subject "History"
 Added assignment: History Essay
 
+$ python main.py delete "Physics Lab"
+Deleted assignment: 'Physics Lab'
+
 $ python main.py stats
 === Your Statistics ===
-Total Assignments: 2
+Total Assignments: 1
 Completed: 0
-Pending: 2
+Pending: 1
 GPA: 0.00
 ```
 

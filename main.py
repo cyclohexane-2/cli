@@ -10,8 +10,8 @@ from utils import format_date, save_to_json, load_from_json
 def main():
     parser = argparse.ArgumentParser(description='StudentHub - Manage your academic life')
 
-    parser.add_argument('command', choices=['add-assignment', 'list', 'complete', 'gpa', 'stats'],
-                        help='Command to execute')
+    parser.add_argument('command', choices=['add-assignment', 'list', 'complete', 'delete', 'gpa', 'stats'],
+                    help='Command to execute')
     parser.add_argument('value', nargs='?', help='Value for the command')
     parser.add_argument('--deadline', help='Deadline in YYYY-MM-DD format')
     parser.add_argument('--subject', help='Subject name')
@@ -40,6 +40,15 @@ def main():
     elif args.command == 'complete':
         if manager.mark_completed(args.value):
             print(f"Marked '{args.value}' as completed!")
+        else:
+            print(f"Assignment '{args.value}' not found")
+
+    elif args.command == 'delete':
+        if not args.value:
+            print("Error: Please provide assignment title to delete")
+            return
+        if manager.delete_assignment(args.value):
+            print(f"Deleted assignment: '{args.value}'")
         else:
             print(f"Assignment '{args.value}' not found")
 

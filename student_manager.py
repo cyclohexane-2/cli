@@ -22,6 +22,14 @@ class StudentManager:
         }
         self.assignments.append(assignment)
         return assignment
+    
+    def delete_assignment(self, title):
+        """Delete an assignment by title"""
+        for i, assignment in enumerate(self.assignments):
+            if assignment['title'] == title:
+                self.assignments.pop(i)
+                return True
+        return False
 
     def list_assignments(self, show_completed=False):
         """List all assignments"""
