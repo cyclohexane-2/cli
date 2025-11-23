@@ -3,13 +3,51 @@ Core StudentHub functionality
 """
 
 from datetime import datetime
-from utils import calculate_days_remaining, validate_grade, get_priority_level
+from utils import calculate_days_remaining, validate_grade, get_priority_level, export_to_csv, save_to_json, load_from_json
 
 
 class StudentManager:
     def __init__(self):
         self.assignments = []
         self.grades = []
+        self.storage_file = "student_data.json"
+        self._load_data()
+    
+    def _load_data(self):
+        data = load_from_json(self.storage_file)
+        self.assignments = data.get("assignments", [])
+        self.grades = data.get("grades", [])
+
+        from datetime import datetime
+        for a in self.assignments:
+            a["deadline"] = datetime.strptime(a["deadline"], "%Y-%m-%d")
+            a["created_at"] = datetime.strptime(a["created_at"], "%Y-%m-%d")
+
+        for g in self.grades:
+            g["date"] = datetime.strptime(g["date"], "%Y-%m-%d")
+
+    def _save_data(self):
+        save_to_json({
+            "assignments": [
+                {
+                    "title": a["title"],
+                    "deadline": a["deadline"].strftime("%Y-%m-%d"),
+                    "subject": a["subject"],
+                    "completed": a["completed"],
+                    "created_at": a["created_at"].strftime("%Y-%m-%d")
+                }
+                for a in self.assignments
+            ],
+            "grades": [
+                {
+                    "subject": g["subject"],
+                    "grade": g["grade"],
+                    "date": g["date"].strftime("%Y-%m-%d")
+                }
+                for g in self.grades
+            ]
+        }, self.storage_file)
+
 
     def add_assignment(self, title, deadline, subject=None):
         """Add a new assignment"""
@@ -21,6 +59,7 @@ class StudentManager:
             'created_at': datetime.now()
         }
         self.assignments.append(assignment)
+        self._save_data()
         return assignment
 
     def list_assignments(self, show_completed=False):
@@ -34,6 +73,7 @@ class StudentManager:
         for assignment in self.assignments:
             if assignment['title'] == title:
                 assignment['completed'] = True
+                self._save_data()
                 return True
         return False
 
@@ -47,6 +87,7 @@ class StudentManager:
             'grade': grade,
             'date': datetime.now()
         })
+        self._save_data()
 
     def calculate_gpa(self):
         """Calculate GPA from grades"""
@@ -84,3 +125,27 @@ class StudentManager:
             'pending': total_assignments - completed,
             'gpa': self.calculate_gpa()
         }
+    
+    def export_assignments(self, filename):
+        """Export assignments to CSV"""
+        cleaned = []
+        for a in self.assignments:
+            cleaned.append({
+                "title": a["title"],
+                "deadline": a["deadline"].strftime("%Y-%m-%d"),
+                "subject": a["subject"],
+                "completed": a["completed"],
+                "created_at": a["created_at"].strftime("%Y-%m-%d")
+            })
+        export_to_csv(cleaned, filename)
+
+    def export_grades(self, filename):
+        """Export grades to CSV"""
+        cleaned = []
+        for g in self.grades:
+            cleaned.append({
+                "subject": g["subject"],
+                "grade": g["grade"],
+                "date": g["date"].strftime("%Y-%m-%d")
+            })
+        export_to_csv(cleaned, filename)
