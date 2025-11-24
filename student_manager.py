@@ -7,7 +7,7 @@ from utils import calculate_days_remaining, validate_grade, get_priority_level, 
 
 
 class StudentManager:
-    persistence_FILE_NAME = "data.json"
+    PERSISTENCE_FILE_NAME = "data.json"
     def __init__(self):
         self.assignments = []
         self.grades = []
@@ -90,7 +90,7 @@ class StudentManager:
             1 - persistence file not found
             2 - corrupted persistence file
         """
-        data = load_from_json(cls.persistence_FILE_NAME)
+        data = load_from_json(cls.PERSISTENCE_FILE_NAME)
         if "status" in data:
             status = data.get("status")
             return cls(), status
@@ -113,7 +113,7 @@ class StudentManager:
         Protected method to aggrigate data
 
         Returns: 
-            dict: final da
+            dict: final data
         """
         return {
             "Assignments": self.assignments,
@@ -123,7 +123,7 @@ class StudentManager:
     @classmethod
     def __deser_object(cls, data):
         """
-        Protected method to load aggrigated data
+        Protected method to load aggregate data
         
         Args:
             data: dict - data to be serialized

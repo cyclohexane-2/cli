@@ -50,14 +50,14 @@ def validate_grade(grade):
 def save_to_json(data, filename):
     """Save data to JSON file"""
     with open(filename, 'w') as f:
-        # NOTE: Edit DateTimeEncoder accordingly if StudentManager contains other non serialiseable types
+        # NOTE: Edit DateTimeEncoder accordingly if StudentManager contains other non serializable types
         json.dump(data, f, indent=4, cls=DateTimeEncoder)
 
 def load_from_json(filename):
     """Load data from JSON file"""
     try:
         with open(filename, 'r') as f:
-            # NOTE: Edit DateTimeDecoder accordingly if StudentManager contains other non serialiseable types
+            # NOTE: Edit DateTimeDecoder accordingly if StudentManager contains other non serializable types
             return json.load(f, cls=DateTimeDecoder)
     except FileNotFoundError:
         return {
