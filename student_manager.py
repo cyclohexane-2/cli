@@ -126,7 +126,7 @@ class StudentManager:
         Protected method to load aggregate data
         
         Args:
-            data: dict - data to be serialized
+            data: dict - data to be deserialized
         """
         manager = cls()
         manager.assignments = data.get("Assignments", [])
