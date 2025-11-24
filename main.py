@@ -18,7 +18,10 @@ def main():
 
     args = parser.parse_args()
 
-    manager = StudentManager()
+    manager, status = StudentManager.load_manager()
+
+    if status == 2:
+        print("Error: Corrupted persistence file detected and removed. Starting with fresh data.")
 
     if args.command == 'add-assignment':
         if not args.value or not args.deadline:
@@ -55,6 +58,7 @@ def main():
         print(f"Pending: {stats['pending']}")
         print(f"GPA: {stats['gpa']:.2f}")
 
+    manager.dump_manager()
 
 if __name__ == '__main__':
     main()
