@@ -13,7 +13,6 @@ from utils import (
 
 
 class TestUtils(unittest.TestCase):
-
     def test_format_date_valid(self):
         """Test format_date with valid date string"""
         result = format_date("2024-12-25")

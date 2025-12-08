@@ -26,6 +26,9 @@ def main():
             return
 
         deadline = format_date(args.deadline)
+        if deadline == "error":
+            print(f"Error: '{args.deadline}' is not a valid date. Please use YYYY-MM-DD format and ensure the date actually exists.")
+            return
         assignment = manager.add_assignment(args.value, deadline, args.subject)
         print(f"Added assignment: {assignment['title']}")
 
