@@ -29,6 +29,28 @@ class TestAssignments:
         assert assignment in student_manager.assignments
         assert assignment["title"] == ""
 
+    def test_add_assignment_with_null_title(self, student_manager):
+        """Assignment with None as title should still be stored."""
+        deadline = datetime.now() + timedelta(days=3)
+
+        assignment = student_manager.add_assignment(None, deadline, "Misc")
+
+        assert assignment in student_manager.assignments
+        assert assignment["title"] is None
+        assert assignment["completed"] is False
+
+    def test_add_assignment_with_past_deadline(self, student_manager):
+        """Assignments in the past should still be tracked."""
+        past_deadline = datetime.now() - timedelta(days=1)
+
+        assignment = student_manager.add_assignment(
+            "Old HW", past_deadline, "History"
+        )
+
+        assert assignment in student_manager.assignments
+        assert assignment["deadline"] == past_deadline
+        assert assignment["completed"] is False
+
     def test_list_assignments_empty_collection(self, student_manager):
         # No assignments added yet
         assert student_manager.list_assignments() == []
