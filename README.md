@@ -47,6 +47,9 @@ python main.py complete "Math Homework"
 # Calculate your GPA
 python main.py gpa
 
+# Set a pomodoro timer for efficient studies
+python main.py pomodoro
+
 # View statistics
 python main.py stats
 ```
@@ -83,6 +86,7 @@ python -m unittest tests/test_utils.py
 ```
 demo/
 ├── main.py              # Entry point
+├── pomodoro.py          # Pomodoro Timer feature
 ├── utils.py             # Utility functions
 ├── student_manager.py   # Core functionality
 ├── tests/               # Test files
