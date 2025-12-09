@@ -9,7 +9,11 @@ import json
 def format_date(date_string):
     """Convert date string to datetime object"""
     # TODO: Add error handling for invalid date formats
-    return datetime.strptime(date_string, "%Y-%m-%d")
+    try:
+        myDate = datetime.strptime(date_string, "%Y-%m-%d")
+        return myDate
+    except ValueError:
+        return "error"
 
 
 def calculate_days_remaining(deadline):
