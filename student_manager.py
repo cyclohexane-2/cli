@@ -3,10 +3,11 @@ Core StudentHub functionality
 """
 
 from datetime import datetime
-from utils import calculate_days_remaining, validate_grade, get_priority_level
+from utils import calculate_days_remaining, validate_grade, get_priority_level, save_to_json, load_from_json
 
 
 class StudentManager:
+    PERSISTENCE_FILE_NAME = "data.json"
     def __init__(self):
         self.assignments = []
         self.grades = []
@@ -73,6 +74,28 @@ class StudentManager:
 
         return sorted(upcoming, key=lambda x: x['days_remaining'])
 
+    def dump_manager(self):
+        """Dumps data into json file for persistence"""
+        data = self._ser_object()
+        save_to_json(data, self.PERSISTENCE_FILE_NAME)
+
+    @classmethod
+    def load_manager(cls):
+        """
+        Load data into the program from persistence file
+
+        Returns: 
+            int: status of loading data from file
+            0 - success
+            1 - persistence file not found
+            2 - corrupted persistence file
+        """
+        res = load_from_json(cls.PERSISTENCE_FILE_NAME)
+        if res["status"] != 0:
+            status = res.get("status")
+            return cls(), status
+        return cls._deser_object(res.get("data")), 0
+
     def get_statistics(self):
         """Get student statistics"""
         total_assignments = len(self.assignments)
@@ -84,3 +107,28 @@ class StudentManager:
             'pending': total_assignments - completed,
             'gpa': self.calculate_gpa()
         }
+
+    def _ser_object(self):
+        """
+        Protected method to aggrigate data
+
+        Returns: 
+            dict: final data
+        """
+        return {
+            "Assignments": self.assignments,
+            "Grades": self.grades
+        }
+    
+    @classmethod
+    def _deser_object(cls, data):
+        """
+        Protected method to load aggregate data
+        
+        Args:
+            data: dict - data to be deserialized
+        """
+        manager = cls()
+        manager.assignments = data.get("Assignments", [])
+        manager.grades = data.get("Grades", [])
+        return manager
