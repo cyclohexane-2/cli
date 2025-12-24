@@ -39,6 +39,10 @@ class StudentManager:
         return False
 
     def add_grade(self, subject, grade):
+        """To check that the grade is integer or not"""
+        if not isinstance(grade, int):
+            raise TypeError("Grade must be an integer")
+        
         """Add a grade for a subject"""
         if not validate_grade(grade):
             raise ValueError("Grade must be between 0 and 100")
