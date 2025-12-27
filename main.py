@@ -47,7 +47,10 @@ def main():
             print("No pending assignments!")
         else:
             for assignment in assignments:
-                print(f"- {assignment['title']} (Due: {assignment['deadline']})")
+                if assignment['subject'] is not None:
+                    print(f"- {assignment['title']} [Subject: {assignment['subject']}] (Due: {assignment['deadline']})")
+                else:
+                    print(f"- {assignment['title']} (Due: {assignment['deadline']})")
 
     elif args.command == 'complete':
         if manager.mark_completed(args.value):
