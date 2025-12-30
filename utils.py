@@ -4,6 +4,7 @@ Utility functions for StudentHub
 
 from datetime import datetime
 import json
+import csv
 import os
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -96,3 +97,16 @@ def get_priority_level(days_remaining):
         return "MEDIUM"
     else:
         return "LOW"
+
+def export_to_csv(data, filename, headers=None):
+    """Export list of dicts to CSV"""
+    if not data:
+        raise ValueError("No data to export")
+
+    if headers is None:
+        headers = list(data[0].keys())
+
+    with open(filename, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=headers)
+        writer.writeheader()
+        writer.writerows(data)

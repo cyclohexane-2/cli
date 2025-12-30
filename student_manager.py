@@ -3,7 +3,7 @@ Core StudentHub functionality
 """
 
 from datetime import datetime
-from utils import calculate_days_remaining, validate_grade, get_priority_level, save_to_json, load_from_json
+from utils import calculate_days_remaining, validate_grade, get_priority_level, save_to_json, load_from_json, export_to_csv
 
 
 class StudentManager:
@@ -111,6 +111,30 @@ class StudentManager:
             'pending': total_assignments - completed,
             'gpa': self.calculate_gpa()
         }
+    
+    def export_assignments(self, filename):
+        """Export assignments to CSV"""
+        cleaned = []
+        for a in self.assignments:
+            cleaned.append({
+                "title": a["title"],
+                "deadline": a["deadline"].strftime("%Y-%m-%d"),
+                "subject": a["subject"],
+                "completed": a["completed"],
+                "created_at": a["created_at"].strftime("%Y-%m-%d")
+            })
+        export_to_csv(cleaned, filename)
+
+    def export_grades(self, filename):
+        """Export grades to CSV"""
+        cleaned = []
+        for g in self.grades:
+            cleaned.append({
+                "subject": g["subject"],
+                "grade": g["grade"],
+                "date": g["date"].strftime("%Y-%m-%d")
+            })
+        export_to_csv(cleaned, filename)
 
     def _ser_object(self):
         """
